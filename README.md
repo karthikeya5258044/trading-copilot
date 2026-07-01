@@ -1,96 +1,84 @@
-﻿# Stock-analytics-project
-📈 Stock Market Analytics & Prediction System
-An end-to-end stock market analytics and prediction system built with Python, SQL, and Machine Learning. This project performs Exploratory Data Analysis (EDA), technical indicator computation, pattern detection, and price trend forecasting using ensemble ML models.
+Trading Copilot 📈
 
-🚀 Project Overview
-This project integrates financial data collection, multi-stock EDA, and predictive modelling to generate data-driven insights for investment decision-making. It covers everything from raw data ingestion to model evaluation, including anomaly detection and candlestick-based visualizations.
-
-🧰 Tech Stack
-CategoryToolsLanguagePython 3.xData ManipulationPandas, NumPyVisualizationMatplotlib, Seaborn, PlotlyMachine LearningScikit-learn, XGBoost, Random ForestData Sourceyfinance / Yahoo Finance APIDatabaseSQL (SQLite / PostgreSQL)EnvironmentJupyter Notebook
-
-📂 Project Structure
-Stock-analytics-project/
-│
-├── stocks.ipynb          # Main notebook — EDA, feature engineering, modelling
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
-
-📊 Key Features
-1. Data Collection & Preprocessing
-
-Fetched historical OHLCV (Open, High, Low, Close, Volume) data using yfinance
-Handled missing values, outliers, and data type normalization
-Stored and queried data using SQL for structured retrieval
-
-2. Exploratory Data Analysis (EDA)
-
-Analyzed price trends, volatility, volume patterns, and daily returns
-Computed rolling statistics: moving averages (SMA, EMA), Bollinger Bands
-Correlation heatmaps across multiple stocks
-
-3. Technical Indicators
-
-Daily returns and cumulative returns
-Rolling volatility (standard deviation windows)
-Volume ratio analysis
-Candlestick chart visualizations
-
-4. Anomaly Detection
-
-Applied clustering techniques to identify hidden market patterns
-Flagged abnormal stock behavior and unusual volume spikes
-
-5. Predictive Modelling
-
-Built Random Forest and XGBoost models for price direction prediction
-Hyperparameter tuning with GridSearchCV to reduce overfitting
-Model evaluation using accuracy, precision, recall, and confusion matrix
+An AI-powered decision-support system for stock trading that goes beyond simple price prediction — it detects market regimes, flags anomalies, mines hidden behavioral patterns, and generates human-readable trading advice.
 
 
-📈 Results & Insights
-
-Identified high-volatility segments and trend reversal zones from EDA
-Achieved meaningful directional accuracy using ensemble models after hyperparameter tuning
-Anomaly detection revealed several historically significant irregular trading patterns
+Currently built and validated on US equities (AAPL, TSLA, MSFT, GOOGL). Indian stock market (NSE) support is planned as the next milestone — see Roadmap.
 
 
-⚙️ Setup & Installation
-1. Clone the repository
-bashgit clone https://github.com/karthikeya5258044/Stock-analytics-project.git
-cd Stock-analytics-project
-2. Install dependencies
-bashpip install -r requirements.txt
-3. Run the notebook
-bashjupyter notebook stocks.ipynb
-
-📦 Requirements
-Create a requirements.txt with:
-pandas
-numpy
-matplotlib
-seaborn
-plotly
-scikit-learn
-xgboost
-yfinance
-jupyter
-
-🔍 Sample Analysis Highlights
-
-Moving Average Crossovers — identified buy/sell signal zones using SMA 20 vs SMA 50
-Volatility Analysis — rolling 30-day std dev plotted against price to spot risk windows
-Return Distribution — daily return histograms revealed non-normal distribution and fat tails
-Cluster-based Anomaly Detection — grouped trading days by behavior patterns to flag outliers
 
 
-🛠️ Future Improvements
+What it does
 
- Add LSTM-based deep learning model for sequential price prediction
- Integrate live data streaming via WebSocket API
- Build an interactive dashboard with Streamlit or Dash
- Add sentiment analysis from financial news headlines
+Most trading signal projects stop at "train a model, print BUY/SELL." Trading Copilot goes further — it combines supervised learning, unsupervised pattern discovery, and anomaly detection into a single pipeline that outputs a plain-English market report, similar to what a research analyst might hand you each morning.
+
+Example output:
+
+═══════════════════════════════════════════════════════
+   MARKET ANALYSIS REPORT — AAPL
+   Date  : 2026-05-15
+   Price : $300.23
+═══════════════════════════════════════════════════════
+
+📊 TODAY'S PRICE BEHAVIOUR
+  Close Price    : $300.23
+  Daily Return   : -1.2%  → Strong down day
+  Volume Ratio   : 1.8x normal  → Above average volume — confirms price move
+
+📉 TECHNICAL INDICATOR READINGS
+  RSI  : 88.4  →  OVERBOUGHT — stock has risen too fast. Pullback likely.
+  MACD : 9.52  →  Bullish but momentum is fading. Watch closely.
+
+🏛️  MARKET REGIME ANALYSIS
+  Current Regime : ⚠️ Volatile Confusion
+  What to do     : Be very cautious. Reduce position size. Wait for clarity.
+
+🔍 ANOMALY DETECTION
+  ✓ Today is a NORMAL day — no anomaly detected.
+
+✓ Both models AGREE — strong signal: SELL ✗
 
 
-👤 Author
-Kompella Kartikeya
-B.Tech CSE – Data Analytics | VIT-AP University | Expected Graduation: 2028
+Pipeline
+
+1. Data Collection    → Stock price API (OHLCV data, multi-ticker)
+2. EDA                → Return distributions, volatility trends, 
+                         correlation heatmaps, candlestick visualization
+3. Feature Engineering→ RSI, MACD, Bollinger Bands, moving averages 
+                         (7/21/50-day), momentum, lag features, volume ratios
+4. Classification     → Random Forest + XGBoost predicting BUY / HOLD / SELL
+5. Market Intelligence→ KMeans regime detection (Bull Momentum, Bear Pressure, 
+                         Sideways Calm, Volatile Confusion)
+                       → Isolation Forest + DBSCAN anomaly detection
+                       → Apriori association rule mining (hidden indicator 
+                         combinations that precede BUY/SELL signals)
+6. Reporting          → Human-readable console report combining all signals
+7. Dashboard          → Power BI visualization layer (in progress)
+
+
+Tech Stack
+
+CategoryToolsData & StoragePython, Pandas, NumPy, SQLAlchemy, SQLiteVisualizationMatplotlib, Seaborn, mplfinanceMachine LearningScikit-learn (Random Forest, KMeans, Isolation Forest, DBSCAN, PCA), XGBoostClass ImbalanceSMOTE (imbalanced-learn)Pattern Miningmlxtend (Apriori, Association Rules)Dashboard (in progress)Power BI
+
+
+Sample Results
+
+
+Trained on 2,700+ trading days across 4 tickers (2020–2026)
+Feature set of 23 technical indicators per prediction
+Random Forest: ~43% accuracy | XGBoost: ~49% accuracy on 3-class BUY/HOLD/SELL classification
+
+
+Honest note on model performance: because HOLD dominates the signal distribution (~74% of days), raw accuracy isn't the most meaningful metric here — the models are currently better at flagging risk context (regime + anomalies) than nailing precise directional calls. Improving BUY/SELL precision via better labeling thresholds and additional features is an active area of iteration.
+
+
+Roadmap
+
+
+ Power BI dashboard for interactive signal visualization
+ Extend to Indian equities (NSE/BSE) via yfinance .NS tickers
+ Improve BUY/SELL precision (currently HOLD-biased due to class imbalance)
+ Backtesting module to simulate strategy P&L over time
+ Live data refresh instead of static historical pull
+
+
